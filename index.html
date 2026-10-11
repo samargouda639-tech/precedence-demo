@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sound Localization — Interactive Demo</title>
+<style>
+:root{--ink:#172b3d;--gold:#bd7d1c;--paper:#f8f5ee;--line:#ded7ca;--muted:#64717c;--blue:#596a78}
+*{box-sizing:border-box}body{margin:0;background:#f7f7fa;color:var(--ink);font-family:Georgia,'Times New Roman',serif;padding:24px}
+main{max-width:960px;margin:auto;background:var(--paper);border:1px solid #e8e0d4;border-radius:18px;padding:26px;box-shadow:0 8px 28px #152b3d0d}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:bold;font-size:17px}.eyebrow{font:600 12px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.range-wrap{margin:22px 0 18px}.range-label{display:flex;justify-content:space-between;gap:12px;font-weight:bold;margin-bottom:12px}input[type=range]{width:100%;accent-color:var(--gold);cursor:pointer}
+.bands{display:flex;justify-content:center;margin:18px auto 10px;gap:0;flex-wrap:wrap}.bands button{font:600 15px Georgia,serif;padding:12px 20px;border:1px solid var(--ink);background:white;color:var(--ink);cursor:pointer}.bands button:first-child{border-radius:10px 0 0 10px}.bands button:last-child{border-radius:0 10px 10px 0}.bands button+button{border-left:0}.bands button.active{background:var(--ink);color:white}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:8px}.visuals{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(170px,.8fr);gap:22px;align-items:center}.headsvg{width:100%;height:auto;display:block;max-height:340px}.bars h3{font-size:14px;font-weight:normal;text-align:center;line-height:1.35;margin:0 0 12px}.barrow{display:flex;align-items:end;justify-content:center;gap:26px;height:185px;border-bottom:1px solid #ddd;padding-bottom:0}.barcol{height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:8px;font-size:13px}.bar{width:42px;min-height:3px;transition:height .2s;border-radius:2px 2px 0 0}.bar.near{background:#bd914c}.bar.far{background:var(--blue)}.legend{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;margin:18px 0 0;font-size:14px}.swatch{display:inline-block;width:13px;height:13px;border-radius:2px;vertical-align:-2px;margin-right:7px}.readout{margin-top:14px;border-left:4px solid var(--gold);background:#fffdf8;padding:14px 16px;line-height:1.5}.readout strong{color:var(--ink)}.readout p{margin:5px 0 0}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.mini{border:1px solid var(--line);border-radius:10px;padding:13px;background:#fff}.mini b{display:block;font-size:14px;margin-bottom:5px}.mini span{font:13px/1.45 Arial,sans-serif;color:#485866}.foot{font:12px/1.5 Arial,sans-serif;color:var(--muted);margin-top:18px}
+@media(max-width:620px){body{padding:10px}main{padding:16px}.visuals{grid-template-columns:1fr}.headsvg{max-height:280px}.bars{max-width:280px;margin:auto;width:100%}.cards{grid-template-columns:1fr}.topline{font-size:15px}.bands button{padding:10px 12px;font-size:13px}}
+</style></head>
+<body><main>
+<div class="eyebrow">Interactive psychoacoustics demo</div>
+<div class="topline"><span>Sound Localization: Interaural Cues</span><span id="angleTop">90°</span></div>
+<div class="range-wrap"><div class="range-label"><label for="azimuth">Azimuth (0° = ahead, 90° = to the side)</label><span id="angleText">90°</span></div><input id="azimuth" type="range" min="0" max="90" value="90" step="1" aria-label="Sound source azimuth"></div>
+<div class="bands" role="group" aria-label="Frequency band"><button class="active" data-band="low">Low (200 Hz)</button><button data-band="mid">Mid (1.5 kHz)</button><button data-band="high">High (5 kHz)</button></div>
+<section class="panel"><div class="visuals">
+<svg class="headsvg" viewBox="0 0 430 330" role="img" aria-label="Top-down head diagram showing sound source, near ear and far ear">
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#172b3d"/></marker></defs>
+<text x="215" y="28" text-anchor="middle" font-size="12" fill="#8b5c20">front</text><path d="M215 36 L205 54 L225 54 Z" fill="#172b3d"/>
+<circle cx="215" cy="166" r="94" fill="#eaf0f5" stroke="#172b3d" stroke-width="2"/>
+<line x1="121" y1="166" x2="309" y2="166" stroke="#d7cdbb" stroke-width="2" stroke-dasharray="5 4"/>
+<rect x="117" y="156" width="9" height="20" rx="2" fill="#172b3d"/><rect x="304" y="156" width="9" height="20" rx="2" fill="#172b3d"/>
+<text x="91" y="198" font-size="12" fill="#172b3d">far ear</text><text x="306" y="198" font-size="12" fill="#172b3d">near ear</text>
+<g id="sourceGroup"><line id="sourceLine" x1="215" y1="166" x2="360" y2="166" stroke="#bd7d1c" stroke-width="2" stroke-dasharray="4 3"/><circle id="sourceDot" cx="360" cy="166" r="8" fill="#bd7d1c"/><text id="sourceLabel" x="341" y="148" font-size="12" fill="#a56812">source</text></g>
+<path id="angleArc" d="M260 166 A45 45 0 0 0 260 166" fill="none" stroke="#bd7d1c" stroke-width="2"/>
+<text x="215" y="294" text-anchor="middle" font-size="13" fill="#64717c">Top view of listener</text>
+</svg>
+<div class="bars"><h3>Relative sound level<br><span style="font-size:12px;color:#64717c">(schematic)</span></h3><div class="barrow"><div class="barcol"><div class="bar near" id="nearBar" style="height:95%"></div><span>near ear</span></div><div class="barcol"><div class="bar far" id="farBar" style="height:82%"></div><span>far ear</span></div></div></div>
+</div><div class="legend"><span><i class="swatch" style="background:#bd914c"></i>near-ear path / level</span><span><i class="swatch" style="background:#172b3d"></i>far-ear path / level</span></div></section>
+<div class="readout" aria-live="polite"><strong id="resultTitle">At 90°, the ears receive the sound at different times and levels.</strong><p id="resultText">At the side, the sound reaches the near ear first. The head can also reduce the sound level at the far ear, especially at high frequencies.</p><p><strong>Estimated interaural time difference:</strong> <span id="itd">656</span> microseconds (Woodworth approximation).</p></div>
+<div class="cards"><div class="mini"><b>Low frequencies</b><span>Timing differences (ITD) are especially useful for locating the sound.</span></div><div class="mini"><b>Mid frequencies</b><span>The auditory system can use timing and level cues together.</span></div><div class="mini"><b>High frequencies</b><span>The head shadow creates stronger level differences between the ears.</span></div></div>
+<div class="foot">Educational illustration only. The ear-level bars are schematic, not measured values. This demo illustrates interaural cues used in sound localization; it is not a full simulation of the precedence effect.</div>
+</main>
+<script>
+const slider=document.getElementById('azimuth');let band='low';
+const $=id=>document.getElementById(id);
+function update(){const a=+slider.value,rad=a*Math.PI/180; $('angleTop').textContent=a+'°';$('angleText').textContent=a+'°';
+// Woodworth spherical-head approximation, radius 8.75 cm and c=343 m/s
+const itd= Math.round((0.0000875/343*1e6)*(rad+Math.sin(rad))*100); $('itd').textContent=itd;
+const x=215+145*Math.sin(rad),y=166-145*Math.cos(rad);$('sourceDot').setAttribute('cx',x);$('sourceDot').setAttribute('cy',y);$('sourceLine').setAttribute('x2',x);$('sourceLine').setAttribute('y2',y);$('sourceLabel').setAttribute('x',Math.min(365,x+8));$('sourceLabel').setAttribute('y',y-13);
+const shadow={low:.04,mid:.20,high:.48}[band];const diff=Math.sin(rad)*shadow;const near= Math.round(92),far=Math.round(92*(1-diff));$('nearBar').style.height=near+'%';$('farBar').style.height=far+'%';
+const bandName={low:'low',mid:'mid',high:'high'}[band];
+if(a===0){$('resultTitle').textContent='At 0°, the sound source is directly ahead.';$('resultText').textContent='The sound reaches both ears at almost the same time and level, so the interaural differences are close to zero.';}else{$('resultTitle').textContent=`At an azimuth of ${a}°, the sound reaches the near ear first.`;$('resultText').textContent=band==='low'?'In the low-frequency band, timing differences between the ears are an especially useful localization cue.':band==='mid'?'In the mid-frequency band, the brain can combine timing and level differences to help estimate the sound direction.':'In the high-frequency band, the head blocks some sound from reaching the far ear, creating a stronger level difference.';}
+}
+document.querySelectorAll('.bands button').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.bands button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');band=btn.dataset.band;update()}));slider.addEventListener('input',update);update();
+</script></body></html>
